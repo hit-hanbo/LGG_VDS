@@ -5,10 +5,10 @@
 #include "stm32f4xx_gpio.h"
 #include "stm32f4xx_rcc.h"
 
-#define  BSP_HiSTM_LED_R_PORT  GPIOC
-#define  BSP_HiSTM_LED_R_PIN   GPIO_Pin_15
-#define  BSP_HiSTM_LED_G_PORT  GPIOC
-#define  BSP_HiSTM_LED_G_PIN   GPIO_Pin_14
+#define  BSP_HiSTM_LED_R_PORT  GPIOB
+#define  BSP_HiSTM_LED_R_PIN   GPIO_Pin_2
+#define  BSP_HiSTM_LED_G_PORT  GPIOB
+#define  BSP_HiSTM_LED_G_PIN   GPIO_Pin_10
 
 #define  HiSTM_LED_R_ON        BSP_HiSTM_LED_R_PORT->ODR &= ~(BSP_HiSTM_LED_R_PIN)
 #define  HiSTM_LED_R_OFF       BSP_HiSTM_LED_R_PORT->ODR |=  (BSP_HiSTM_LED_R_PIN)

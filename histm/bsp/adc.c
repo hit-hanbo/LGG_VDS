@@ -6,6 +6,7 @@ extern uint16_t HiSTM_SPWM_Mr;
 
 /* ADC sampling result */
 float32_t V_RMS = 0;
+float32_t I_RMS = 0;
 
 /* ADC data buffer */
 uint16_t  ADC_sample_regular[16];
@@ -14,13 +15,6 @@ uint16_t  ADC_sample_injected[4];
 /* sine sampling buffer */
 float32_t ADC_vsample[500] = { 0 };
 float32_t ADC_isample[500] = { 0 };
-
-float32_t ADC_vsample_U[500] = { 0 };
-float32_t ADC_isample_U[500] = { 0 };
-float32_t ADC_vsample_V[500] = { 0 };
-float32_t ADC_isample_V[500] = { 0 };
-float32_t ADC_vsample_W[500] = { 0 };
-float32_t ADC_isample_W[500] = { 0 };
 
 /* data process buffer */
 uint16_t  ADC_counter = 0;
@@ -37,6 +31,9 @@ void HiSTM_ADC_Init(void)
 	/* enable clks */
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2, ENABLE);
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC2, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC3, ENABLE);
+
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
 
@@ -92,7 +89,7 @@ void HiSTM_ADC_Init(void)
 	ADC_Init_struct.ADC_Resolution = ADC_Resolution_12b;
 	ADC_Init_struct.ADC_DataAlign = ADC_DataAlign_Right;
 	ADC_Init_struct.ADC_ScanConvMode = ENABLE;
-	ADC_Init_struct.ADC_ContinuousConvMode = ENABLE;
+	ADC_Init_struct.ADC_ContinuousConvMode = DISABLE;
 	ADC_Init_struct.ADC_NbrOfConversion = 16;
 	ADC_Init_struct.ADC_ExternalTrigConv = ADC_ExternalTrigConv_T1_CC1;
 	ADC_Init_struct.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_Rising;
@@ -128,9 +125,9 @@ void HiSTM_ADC_Init(void)
 }
 
 
-void DMA2_Stream0IRQHandler(void)
+void DMA2_Stream0_IRQHandler(void)
 {
-	if(DMA_GetITStatus(DMA2_Stream0, DMA_IT_TC) == SET)
+	if(DMA_GetITStatus(DMA2_Stream0, DMA_IT_TCIF0) == SET)
 	{
 		DMA_ClearITPendingBit(DMA2_Stream0, DMA_IT_TC);
 		ADC_counter ++;
@@ -148,7 +145,6 @@ void DMA2_Stream0IRQHandler(void)
 		{
 			ADC_counter = 0;
 			/* call other control */
-
 		}
 
 	}

@@ -20,5 +20,7 @@ void HiSTM_SysTick_init(void);
 void HiSTM_Delay(uint32_t ms);
 void HiSTM_General_TIM2_init(uint16_t ARR);
 void SysTick_Handler(void);
+void HiSTM_slave_TIM9_init(void);
+void HiSTM_slave_TIM9_set_period(uint16_t arr_1);
 
 #endif

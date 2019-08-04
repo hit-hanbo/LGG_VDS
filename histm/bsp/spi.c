@@ -7,7 +7,7 @@ void HiSTM_SPI1_Init(void)
 	SPI_InitTypeDef   spi_init_struct;
 	GPIO_InitTypeDef  gpio_init_struct;
 	//  enable clks
-	RCC_APB1PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 
 	spi_init_struct.SPI_Mode = SPI_Mode_Master;
@@ -15,7 +15,7 @@ void HiSTM_SPI1_Init(void)
 	spi_init_struct.SPI_CPHA = SPI_CPHA_1Edge;
 	spi_init_struct.SPI_CPOL = SPI_CPOL_Low;
 	spi_init_struct.SPI_DataSize = SPI_DataSize_8b;
-	spi_init_struct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_64;
+	spi_init_struct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_128;
 	spi_init_struct.SPI_FirstBit = SPI_FirstBit_MSB;
 	spi_init_struct.SPI_NSS = SPI_NSS_Soft;
 	SPI_Init(SPI1, &spi_init_struct);

@@ -61,6 +61,7 @@ void HiSTM_Advance_TIM1_init(uint16_t ARR_1)
 	GPIO_PinAFConfig(GPIOB, GPIO_PinSource15, GPIO_AF_TIM1);
 
 	//  update event trigger output
+	TIM_SelectMasterSlaveMode(TIM1, TIM_MasterSlaveMode_Enable);
 	TIM_SelectOutputTrigger(TIM1, TIM_TRGOSource_Update);
 }
 
@@ -173,7 +174,7 @@ void HiSTM_Delay_ticks(uint32_t ms)
 
 void HiSTM_Delay(uint32_t ms)
 {
-	uint32_t systick_val = ms * 12500;
+	uint32_t systick_val = ms * 2000;
 	//  disable systick
 	SysTick->CTRL &= ~(1 << 0);
 	SysTick->VAL = 0;
@@ -203,3 +204,44 @@ void HiSTM_General_TIM2_init(uint16_t ARR)
 	TIM_SelectOutputTrigger(TIM2, TIM_TRGOSource_Update);
 }
 
+void HiSTM_slave_TIM9_init(void)
+{
+	TIM_TimeBaseInitTypeDef tim_base_init_struct;
+	NVIC_InitTypeDef		nvic_init_struct;
+
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM9, ENABLE);
+	tim_base_init_struct.TIM_CounterMode = TIM_CounterMode_Up;
+	tim_base_init_struct.TIM_ClockDivision = TIM_CKD_DIV1;
+	tim_base_init_struct.TIM_Period = 100;
+	tim_base_init_struct.TIM_Prescaler = 0x0000;
+	tim_base_init_struct.TIM_RepetitionCounter = 0;
+	TIM_TimeBaseInit(TIM9, &tim_base_init_struct);
+	TIM_SelectMasterSlaveMode(TIM9, TIM_MasterSlaveMode_Enable);
+	TIM_SelectSlaveMode(TIM9, TIM_SlaveMode_External1);
+	TIM_SelectInputTrigger(TIM9, TIM_TS_ITR0);
+
+	TIM_ITConfig(TIM9, TIM_IT_Update, ENABLE);
+	TIM_ClearITPendingBit(TIM9, TIM_IT_Update);
+
+	nvic_init_struct.NVIC_IRQChannel = TIM1_BRK_TIM9_IRQn;
+	nvic_init_struct.NVIC_IRQChannelCmd = ENABLE;
+	nvic_init_struct.NVIC_IRQChannelPreemptionPriority = 6;
+	nvic_init_struct.NVIC_IRQChannelSubPriority = 0;
+	NVIC_Init(&nvic_init_struct);
+
+	TIM9->CR1 |= (1 << 0);
+}
+
+void HiSTM_slave_TIM9_set_period(uint16_t arr_1)
+{
+	TIM9->ARR = arr_1 - 1;
+}
+
+void TIM1_BRK_TIM9_IRQHandler(void)
+{
+	if(TIM_GetITStatus(TIM9, TIM_IT_Update) == SET)
+	{
+		TIM_ClearITPendingBit(TIM9, TIM_IT_Update);
+		//  do something
+	}
+}

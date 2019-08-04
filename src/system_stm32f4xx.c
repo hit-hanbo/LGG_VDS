@@ -3,7 +3,7 @@
   * @file    system_stm32f4xx.c
   * @author  MCD Application Team
   * @version V1.8.0
-  * @date    09-November-2016
+  * @date    04-November-2016
   * @brief   CMSIS Cortex-M4 Device Peripheral Access Layer System Source File.
   *          This file contains the system clock configuration for STM32F4xx devices.
   *
@@ -285,7 +285,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2016 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2015 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -348,9 +348,9 @@
      through STLINK MCO pin of STM32F103 microcontroller. The frequency cannot be changed
      and is fixed at 8 MHz.
      Hardware configuration needed for Nucleo Board:
-     � SB54, SB55 OFF
-     � R35 removed
-     � SB16, SB50 ON */
+     ?SB54, SB55 OFF
+     ?R35 removed
+     ?SB16, SB50 ON */
 /* #define USE_HSE_BYPASS */
 
 #if defined(USE_HSE_BYPASS)
@@ -849,7 +849,7 @@ static void SetSysClock(void)
   RCC->CFGR |= RCC_CFGR_PPRE1_DIV2;
 
   /* Configure the main PLL */
-  RCC->PLLCFGR = 16 | (200 << 6) | (((2 >> 1) -1) << 16) | (PLL_Q << 24) ;
+  RCC->PLLCFGR = PLL_M | (PLL_N << 6) | (((PLL_P >> 1) -1) << 16) | (PLL_Q << 24);
 
   /* Enable the main PLL */
   RCC->CR |= RCC_CR_PLLON;
