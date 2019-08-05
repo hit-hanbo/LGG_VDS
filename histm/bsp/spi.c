@@ -15,7 +15,7 @@ void HiSTM_SPI1_Init(void)
 	spi_init_struct.SPI_CPHA = SPI_CPHA_1Edge;
 	spi_init_struct.SPI_CPOL = SPI_CPOL_Low;
 	spi_init_struct.SPI_DataSize = SPI_DataSize_8b;
-	spi_init_struct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_128;
+	spi_init_struct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;
 	spi_init_struct.SPI_FirstBit = SPI_FirstBit_MSB;
 	spi_init_struct.SPI_NSS = SPI_NSS_Soft;
 	SPI_Init(SPI1, &spi_init_struct);

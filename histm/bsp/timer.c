@@ -61,7 +61,6 @@ void HiSTM_Advance_TIM1_init(uint16_t ARR_1)
 	GPIO_PinAFConfig(GPIOB, GPIO_PinSource15, GPIO_AF_TIM1);
 
 	//  update event trigger output
-	TIM_SelectMasterSlaveMode(TIM1, TIM_MasterSlaveMode_Enable);
 	TIM_SelectOutputTrigger(TIM1, TIM_TRGOSource_Update);
 }
 
@@ -174,7 +173,7 @@ void HiSTM_Delay_ticks(uint32_t ms)
 
 void HiSTM_Delay(uint32_t ms)
 {
-	uint32_t systick_val = ms * 2000;
+	uint32_t systick_val = ms * 25000;
 	//  disable systick
 	SysTick->CTRL &= ~(1 << 0);
 	SysTick->VAL = 0;

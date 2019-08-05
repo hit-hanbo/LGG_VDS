@@ -57,10 +57,10 @@ void HiSTM_SPWM_bipolar_TIM_DMA_init(void)
 	DMA_Init(DMA2_Stream5, &dma_init_struct);
 
 	/* DMA interrupt */
-	DMA_ITConfig(DMA2_Stream5, DMA_IT_TC, ENABLE);
-	DMA_ClearITPendingBit(DMA2_Stream5, DMA_IT_TC);
+	DMA_ITConfig(DMA2_Stream5, DMA_IT_HT, ENABLE);
+	DMA_ClearITPendingBit(DMA2_Stream5, DMA_IT_HT);
 	nvic_init_struct.NVIC_IRQChannel = DMA2_Stream5_IRQn;
-	nvic_init_struct.NVIC_IRQChannelCmd = DISABLE;
+	nvic_init_struct.NVIC_IRQChannelCmd = ENABLE;
 	nvic_init_struct.NVIC_IRQChannelPreemptionPriority = 2;
 	nvic_init_struct.NVIC_IRQChannelSubPriority = 0;
 	NVIC_Init(&nvic_init_struct);
@@ -94,10 +94,17 @@ void HiSTM_SPWM_bipolar_cmd(FunctionalState NewState)
 
 void DMA2_Stream5_IRQHandler(void)
 {
-	if(DMA_GetITStatus(DMA2_Stream5, DMA_IT_TCIF5) == SET)
+	if(DMA_GetITStatus(DMA2_Stream5, DMA_IT_HTIF5) == SET)
 	{
-		DMA_ClearITPendingBit(DMA2_Stream5, DMA_IT_TC);
+		DMA_ClearITPendingBit(DMA2_Stream5, DMA_IT_HTIF5);
 
+		/* Switch ADC trigger edge */
+		/* 1. disable ADC */
+		ADC1->CR2 &= ~(1 << 0);
+		/* 2. switch sampling time */
+		ADC1->CR2 ^= ( (1 << 28) | (1 << 29) );
+		/* enable ADC */
+		ADC1->CR2 |= (1 << 0);
 
 	}
 }

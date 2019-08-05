@@ -17,7 +17,6 @@ float32_t ADC_vsample[500] = { 0 };
 float32_t ADC_isample[500] = { 0 };
 
 /* data process buffer */
-uint16_t  ADC_counter = 0;
 
 
 void HiSTM_ADC_Init(void)
@@ -127,26 +126,22 @@ void HiSTM_ADC_Init(void)
 
 void DMA2_Stream0_IRQHandler(void)
 {
+	uint16_t ADC_counter = 0;
+
 	if(DMA_GetITStatus(DMA2_Stream0, DMA_IT_TCIF0) == SET)
 	{
 		DMA_ClearITPendingBit(DMA2_Stream0, DMA_IT_TC);
-		ADC_counter ++;
+
+		/* get nums transmitted */
+		ADC_counter = HiSTM_SPWM_Mr - DMA_GetCurrDataCounter(DMA2_Stream5);
 
 		/* ADC data process */
+		/*  1.  quick sort */
 		qsort(&ADC_sample_regular[0], 7, sizeof(uint16_t), _qsort_cmpr);
 		qsort(&ADC_sample_regular[7], 7, sizeof(uint16_t), _qsort_cmpr);
-
-		ADC_vsample[ADC_counter] = (float32_t)(ADC_sample_regular[2] +\
-				ADC_sample_regular[3] + ADC_sample_regular[4]) *1.20 / 4096 - 2.500;
-		ADC_isample[ADC_counter] = (float32_t)(ADC_sample_regular[9] +\
-				ADC_sample_regular[10] + ADC_sample_regular[11]) * 1.20 / 4096 - 1.509;
-
-		if(ADC_counter == HiSTM_SPWM_Mr)
-		{
-			ADC_counter = 0;
-			/* call other control */
-		}
-
+		/*  2.  means for middle value */
+		ADC_vsample[ADC_counter];
+		ADC_isample[ADC_counter];
 	}
 }
 
