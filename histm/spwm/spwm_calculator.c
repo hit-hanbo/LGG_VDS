@@ -12,7 +12,6 @@ uint16_t HiSTM_SPWM_sin_freq = 50;
 uint16_t HiSTM_SPWM_Mr = 500;
 float32_t HiSTM_SPWM_Ma = 0.8;
 
-#define pi 3.1415927
 
 /* TIM parameters */
 uint32_t HiSTM_TIM_CLK = 90000000;

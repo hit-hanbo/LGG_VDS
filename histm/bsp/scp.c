@@ -91,6 +91,8 @@ void HiSTM_SCP_address_set(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
  */
 void HiSTM_SCP_init(void)
 {
+	uint32_t K;
+
 	GPIO_InitTypeDef  gpio_init_struct;
 
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
@@ -123,12 +125,13 @@ void HiSTM_SCP_init(void)
 
 
 	HiSTM_SCP_RES_OUTL;
-	HiSTM_Delay(200);
+	HiSTM_Delay(300);
+
 	HiSTM_SCP_RES_OUTH;
-	HiSTM_Delay(200);
+	HiSTM_Delay(300);
 
 	HiSTM_SCP_transmit_cmd(0x11);
-	HiSTM_Delay(200);
+	HiSTM_Delay(300);
 
 	HiSTM_SCP_transmit_cmd(0xB1);
 	HiSTM_SCP_transmit_data8(0x05);	HiSTM_SCP_transmit_data8(0x3C);	HiSTM_SCP_transmit_data8(0x3C);
@@ -157,7 +160,7 @@ void HiSTM_SCP_init(void)
 #ifdef HiSTM_SCP_OP_POTRAIT
 	HiSTM_SCP_transmit_data8(0xC0);
 #endif
-#ifdef HiSTM_SCP_OP_LANDSCAPR
+#ifdef HiSTM_SCP_OP_LANDSCAPE
 	HiSTM_SCP_transmit_data8(0xA0);
 #endif
 	HiSTM_SCP_transmit_cmd(0xE0);

@@ -15,7 +15,7 @@ void HiSTM_SPI1_Init(void)
 	spi_init_struct.SPI_CPHA = SPI_CPHA_1Edge;
 	spi_init_struct.SPI_CPOL = SPI_CPOL_Low;
 	spi_init_struct.SPI_DataSize = SPI_DataSize_8b;
-	spi_init_struct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;
+	spi_init_struct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_64;
 	spi_init_struct.SPI_FirstBit = SPI_FirstBit_MSB;
 	spi_init_struct.SPI_NSS = SPI_NSS_Soft;
 	SPI_Init(SPI1, &spi_init_struct);
@@ -40,8 +40,10 @@ uint8_t HiSTM_SPI1_transmit_data(uint8_t data)
 //	if(SPI2->SR & SPI_SR_BSY)
 //		return HiSTM_SPI_TX_ERROR;
 	SPI1->DR = data;
-	for(i=0; i<0xFF; i++);
+
 	//  wait for transmission
+	for(i=0; i<0xFF; i++);
+
 	return HiSTM_SPI_TX_OK;
 }
 

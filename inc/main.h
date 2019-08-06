@@ -13,6 +13,7 @@
 
 /* histm headers */
 #include "adc.h"
+#include "dac.h"
 #include "timer.h"
 #include "scp.h"
 #include "LED.h"
@@ -20,13 +21,14 @@
 #include "spwm_bipolar.h"
 #include "spwm_3phase.h"
 #include "spwm_calculator.h"
+#include "vector_control.h"
+
 
 /* debug interface */
 #include "stm32f4xx_usart.h"
 
 
 /* static functions */
-static void HiSTM_system_clocks_config(void);
 void HiSTM_USART_Init(void);
 
 #endif
