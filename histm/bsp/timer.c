@@ -244,3 +244,33 @@ void TIM1_BRK_TIM9_IRQHandler(void)
 		//  do something
 	}
 }
+
+/* init TIM8 as input capture */
+void HiSTM_TIM8_capture_init(void)
+{
+	TIM_TimeBaseInitTypeDef  TIM_base_init_struct;
+	TIM_ICInitTypeDef        TIM_ic_init_struct;
+	GPIO_InitTypeDef         GPIO_init_struct;
+
+	/* enable tim8 clock */
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM8, ENABLE);
+	/* configure tim8 counter */
+	TIM_base_init_struct.TIM_ClockDivision = 0;
+	TIM_base_init_struct.TIM_CounterMode = TIM_CounterMode_Up;
+	TIM_base_init_struct.TIM_Period = 0;
+	TIM_base_init_struct.TIM_RepetitionCounter = 0;
+	TIM_TimeBaseInit(TIM8, &TIM_base_init_struct);
+	/* configure gpio */
+	RCC_AHB1ClockGatingCmd(RCC_AHB1ENR_GPIOAEN, ENABLE);
+	GPIO_init_struct.GPIO_Pin = GPIO_Pin_0;
+	GPIO_init_struct.GPIO_Mode = GPIO_Mode_AF;
+	GPIO_init_struct.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_Init(GPIOA, &GPIO_init_struct);
+
+	/* configure input capture */
+	TIM_ic_init_struct.TIM_Channel = TIM_Channel_1;
+	TIM_ic_init_struct.TIM_ICPolarity = TIM_ICPolarity_Rising;
+	TIM_ic_init_struct.TIM_ICSelection = TIM_ICSelection_DirectTI;
+
+}
+
